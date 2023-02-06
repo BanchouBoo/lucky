@@ -30,19 +30,19 @@ You may also define a different [build mode](https://ziglang.org/documentation/m
 - `-c`, `--config` - file path to load for the config, defaults to `XDG_CONFIG_HOME/lucky/config.lua`
 
 ## api
-`lucky.bind(bind_string, { ... })` - bind a modifier+key/mouse button combination
-`lucky.cmd(command, arg1, arg2, ...)` - run a command directly, with function argument being a new argument to the command
-`lucky.shell(command_string)` - runs `command_string` under the system's shell, useful if you want to use environment variables, subshells, pipelines, file redirects, etc. which are not available when running a command through `cmd`
-`lucky.is_root(window_id)` - returns true if `window_id` is the root window
-`lucky.get_root()` - returns the ID of the root window (based on the currently focused window)
-`lucky.get_parent_window(window_id)` - return the ID of the immediate non-root parent of `window_id`, if no parent exist return `window_id`
-`lucky.get_top_level_window(window_id)` - return the ID of the top level non-root parent of `window_id`, if no parents exist return `window_id`
-`lucky.get_focused_window()` - return the ID of the currently focused window
-`lucky.get_geometry(window_id)` - returns a table containing the `x`, `y`, `width`, `height`, and `border_width` of `window_id`
-`lucky.get_title(window_id)` - returns the title of `window_id`
-`lucky.get_class(window_id)` - returns the class of `window_id`
-`lucky.get_instance(window_id)` - returns the instance of `window_id`
-`lucky.reload()` - reload your config
+- `lucky.bind(bind_string, { ... })` - bind a modifier+key/mouse button combination
+- `lucky.cmd(command, arg1, arg2, ...)` - run a command directly, with function argument being a new argument to the command
+- `lucky.shell(command_string)` - runs `command_string` under the system's shell, useful if you want to use environment variables, subshells, pipelines, file redirects, etc. which are not available when running a command through `cmd`
+- `lucky.is_root(window_id)` - returns true if `window_id` is the root window
+- `lucky.get_root()` - returns the ID of the root window (based on the currently focused window)
+- `lucky.get_parent_window(window_id)` - return the ID of the immediate non-root parent of `window_id`, if no parent exist return `window_id`
+- `lucky.get_top_level_window(window_id)` - return the ID of the top level non-root parent of `window_id`, if no parents exist return `window_id`
+- `lucky.get_focused_window()` - return the ID of the currently focused window
+- `lucky.get_geometry(window_id)` - returns a table containing the `x`, `y`, `width`, `height`, and `border_width` of `window_id`
+- `lucky.get_title(window_id)` - returns the title of `window_id`
+- `lucky.get_class(window_id)` - returns the class of `window_id`
+- `lucky.get_instance(window_id)` - returns the instance of `window_id`
+- `lucky.reload()` - reload your config
 
 ## examples
 ### launch a terminal
@@ -62,6 +62,7 @@ for i=1,9 do
             lucky.cmd('dwmc', 'viewex', tostring(i - 1))
         end,
     })
+end
 ```
 
 ### reload config
