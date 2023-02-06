@@ -1,0 +1,9 @@
+[submodule "pkg/accord"]
+	path = pkg/accord
+	url = git@github.com:banchouboo/accord
+[submodule "pkg/xzb"]
+	path = pkg/xzb
+	url = git@github.com:banchouboo/xzb.git
+[submodule "pkg/ziglua"]
+	path = pkg/ziglua
+	url = git@github.com:banchouboo/ziglua.git
