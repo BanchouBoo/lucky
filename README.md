@@ -3,8 +3,8 @@
 
 ## build
 Dependencies:
-- xcb
-- xcb-keysyms
+- `xcb`
+- `xcb-keysyms`
 
 To install, run `zig build -p <prefix>` where `<prefix>` is the directory that contains the `bin` folder you want it to install to.
 
@@ -55,7 +55,7 @@ lucky.bind('super Return', {
 ```
 
 ### bind super 1-9 to switch tag in dwm
-```
+```lua
 for i=1,9 do
     lucky.bind('super ' .. tostring(i), {
         press = function()
@@ -66,7 +66,7 @@ end
 ```
 
 ### reload config
-```
+```lua
 lucky.bind('super minus', {
     press = function(window_id)
         lucky.reload()
