@@ -130,6 +130,7 @@ lucky.bind("mouse_left", {
     - Mouse movement relative to the last motion event for motion callback
 - [ ] Look into what's possible with the X input extension
     - In particular, I'd like to implement things like touchpad and touchscreen gestures. Maybe stuff with drawing tablet input as well (pressure, for example).
+    - I have a general idea of how to do stuff with this but I don't have devices to test with which makes it rather difficult to build support for these things
 - [ ] Chording system
     - Could perhaps work by giving a table to a function instead, which has keys to functions or more tables for nested chords
     - Callback users can implement when updating the chord state, they could use this information to build their own whichkey-like system
