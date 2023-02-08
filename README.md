@@ -2,6 +2,8 @@
 `lucky` is an input daemon for Xorg configured with a lua script.
 
 ## build
+Note: requires Zig master, you can download builds at https://ziglang.org/download
+
 Dependencies:
 - `xcb`
 - `xcb-keysyms`
