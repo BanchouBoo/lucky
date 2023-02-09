@@ -175,7 +175,7 @@ const api = struct {
         var mouse_button: xzb.MouseButton = .any;
         var is_mouse = false;
         binding.mod_mask = .none;
-        var tokens = mem.tokenize(u8, bind_string, "+ ");
+        var tokens = mem.tokenize(u8, bind_string, " ");
 
         while (tokens.next()) |token| {
             const mask_value = meta.stringToEnum(xzb.ModMask, token) orelse {
