@@ -34,7 +34,7 @@ You may also define a different [build mode](https://ziglang.org/documentation/m
 ## api
 - `lucky.bind(bind_string, { ... })` - bind a modifier+key/mouse button combination
 - `lucky.cmd(command, arg1, arg2, ...)` - run a command directly, with function argument being a new argument to the command
-- `lucky.shell(command_string)` - runs `command_string` under the system's shell, useful if you want to use environment variables, subshells, pipelines, file redirects, etc. which are not available when running a command through `cmd`
+- `lucky.shell(command_string)` - runs `command_string` under the system's shell, useful if you want to use subshells, pipelines, file redirects, etc. which are not available when running a command through `cmd`
 - `lucky.is_root(window_id)` - returns true if `window_id` is the root window
 - `lucky.get_root()` - returns the ID of the root window (based on the currently focused window)
 - `lucky.get_parent_window(window_id)` - return the ID of the immediate non-root parent of `window_id`, if no parent exist return `window_id`
@@ -51,7 +51,7 @@ You may also define a different [build mode](https://ziglang.org/documentation/m
 ```lua
 lucky.bind('super Return', {
     press = function(window_id)
-        lucky.shell('$TERMINAL')
+        lucky.cmd(os.getenv('TERMINAL') or 'xterm')
     end
 })
 ```
