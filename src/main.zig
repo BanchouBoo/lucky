@@ -768,7 +768,7 @@ fn parseButton(
     x: i16,
     y: i16,
     window: xzb.Window,
-) meta.Tuple(&.{ Binding, bool }) {
+) struct { Binding, bool } {
     for (button_bindings.items) |binding| {
         const has_mod_mask = if (binding.mod_mask.hasAll(.{.any}))
             binding.mod_mask.hasAny(.{mod_mask}) or binding.mod_mask == .any
