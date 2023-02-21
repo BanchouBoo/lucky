@@ -436,7 +436,7 @@ const api = struct {
                     log.err("Ran out of memory!", .{});
                     return;
                 };
-                for (argv) |arg, i| argv_buf[i] = (arena.dupeZ(u8, arg) catch {
+                for (argv, argv_buf) |arg, *buf| buf.* = (arena.dupeZ(u8, arg) catch {
                     log.err("Ran out of memory!", .{});
                     return;
                 }).ptr;
@@ -471,11 +471,9 @@ const api = struct {
             log.err("Error allocating memory for lucky.{s}()!", .{@src().fn_name});
             return 0;
         };
-        {
-            var i: usize = 0;
-            while (i < count) : (i += 1) {
-                args[i] = to(lua, []const u8, @intCast(i32, i + 1));
-            }
+
+        for (0..count) |i| {
+            args[i] = to(lua, []const u8, @intCast(i32, i + 1));
         }
 
         execute(arena, args, false);
@@ -769,6 +767,7 @@ fn parseButton(
     y: i16,
     window: xzb.Window,
 ) struct { Binding, bool } {
+    // TODO: ^ make this ?Binding instead
     for (button_bindings.items) |binding| {
         const has_mod_mask = if (binding.mod_mask.hasAll(.{.any}))
             binding.mod_mask.hasAny(.{mod_mask}) or binding.mod_mask == .any
@@ -903,7 +902,7 @@ fn wrap(function: anytype) ziglua.CFn {
     const registerFn = struct {
         pub fn registerFn(l: *Lua) i32 {
             var args: ArgsT = undefined;
-            inline for (meta.fields(ArgsT)) |field, i| {
+            inline for (meta.fields(ArgsT), 0..) |field, i| {
                 args[i] = to(l, field.type, i + 1);
             }
 
@@ -932,7 +931,7 @@ fn GetFnType(comptime name: [:0]const u8, comptime signature: type) type {
 
         pub fn call(self: @This(), args: ArgsT) !ResultT {
             self.lua.getGlobal(name) catch return error.MissingFn;
-            inline for (fields) |_, i| {
+            inline for (0..fields.len) |i| {
                 push(self.lua, args[i]);
             }
             if (ResultT != void) {
@@ -1108,7 +1107,7 @@ pub fn main() anyerror!u8 {
                 }
 
                 if (!pressed) {
-                    for (mouse_stack.constSlice()) |item, i| {
+                    for (mouse_stack.constSlice(), 0..) |item, i| {
                         if (button.detail == item.value) {
                             _ = mouse_stack.orderedRemove(i);
                             if (mouse_stack.len == 0) {
