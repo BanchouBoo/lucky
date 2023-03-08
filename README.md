@@ -19,7 +19,7 @@ and to install it for just the current user you could do:
 zig build -p ~/.local
 ```
 
-You may also define a different [build mode](https://ziglang.org/documentation/master/#Build-Mode) using `-Dmode=<mode>`, the default is `ReleaseFast`
+You may also define a different [build mode](https://ziglang.org/documentation/master/#Build-Mode) using `-Doptimize=<mode>`, the default is `ReleaseFast`
 
 ## features
 - Bind `press` and `release` functions to keys and mouse buttons

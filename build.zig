@@ -3,9 +3,9 @@ const ziglua = @import("pkg/ziglua/build.zig");
 
 pub fn getBuildMode(b: *std.build.Builder, default: std.builtin.Mode) !std.builtin.Mode {
     const description = try std.mem.join(b.allocator, "", &.{
-        "What mode the project should build in (default: ", @tagName(default), ")",
+        "What optimization mode the project should build in (default: ", @tagName(default), ")",
     });
-    const mode = b.option(std.builtin.Mode, "mode", description) orelse default;
+    const mode = b.option(std.builtin.Mode, "optimize", description) orelse default;
 
     return mode;
 }
