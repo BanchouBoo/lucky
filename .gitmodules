@@ -6,4 +6,4 @@
 	url = git@github.com:banchouboo/xzb.git
 [submodule "pkg/ziglua"]
 	path = pkg/ziglua
-	url = git@github.com:banchouboo/ziglua.git
+	url = git@github.com:natecraddock/ziglua.git
