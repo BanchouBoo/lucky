@@ -753,7 +753,7 @@ fn parseKey(
                     };
                 }
                 return true;
-            } else return false;
+            } else continue;
         }
     }
     return false;
@@ -791,7 +791,7 @@ fn parseButton(
                     };
                 }
                 return .{ binding, true };
-            } else return .{ undefined, false };
+            } else continue;
         }
     }
     return .{ undefined, false };
