@@ -1,6 +1,8 @@
 # lucky
 `lucky` is an input daemon for Xorg configured with a lua script.
 
+To get a quick overview of what can be done, see the [examples](#examples).
+
 ## build
 Note: requires Zig master, you can download builds at https://ziglang.org/download
 
@@ -65,6 +67,26 @@ for i=1,9 do
         end,
     })
 end
+```
+
+### bind a key for a specific window
+```lua
+-- when Discord is focused, this keybinding will be active
+lucky.bind('alt Return', {
+    filter = function(wid)
+        return lucky.get_class(wid) == "discord"
+    end,
+    press = function()
+        lucky.cmd('notify-send', 'Discord is the current focused window')
+    end
+})
+
+-- when Discord is not focused, this keybinding will be active
+lucky.bind('alt Return', {
+    press = function()
+        lucky.cmd('notify-send', 'Discord is NOT the current focused window')
+    end
+})
 ```
 
 ### reload config
