@@ -1,5 +1,4 @@
 const std = @import("std");
-const ziglua = @import("pkg/ziglua/build.zig");
 
 pub fn getBuildMode(b: *std.build.Builder, default: std.builtin.Mode) !std.builtin.Mode {
     const description = try std.mem.join(b.allocator, "", &.{
@@ -22,18 +21,20 @@ pub fn build(b: *std.build.Builder) !void {
         .target = target,
     });
 
-    lucky.addAnonymousModule("accord", .{ .source_file = .{ .path = "pkg/accord/accord.zig" } });
-    lucky.addAnonymousModule("xzb", .{ .source_file = .{ .path = "pkg/xzb/xzb.zig" } });
     // TODO: consider changing to 5.1, for a future in which luajit has bindings
-    lucky.addModule("ziglua", ziglua.linkAndPackage(b, lucky, .{ .version = .lua_54 })); // this links libc
+    const ziglua = b.dependency("ziglua", .{ .version = .lua_54 });
+    lucky.addModule("ziglua", ziglua.module("ziglua"));
+    lucky.addModule("accord", b.dependency("accord", .{}).module("accord"));
+    lucky.addModule("xzb", b.dependency("xzb", .{}).module("xzb"));
 
+    lucky.linkLibrary(ziglua.artifact("lua"));
     lucky.linkSystemLibrary("xcb");
     lucky.linkSystemLibrary("xcb-keysyms");
     // lucky.linkSystemLibrary("xcb-xtest");
 
-    lucky.install();
+    b.installArtifact(lucky);
 
-    const run_cmd = lucky.run();
+    const run_cmd = b.addRunArtifact(lucky);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);

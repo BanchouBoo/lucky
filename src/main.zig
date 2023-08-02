@@ -212,7 +212,7 @@ const api = struct {
                             break :exit;
                         },
                     };
-                    mouse_button = @intToEnum(xzb.MouseButton, button_index);
+                    mouse_button = @enumFromInt(button_index);
                 } else {
                     keysym = xzb.Keysym.fromName(token) catch {
                         log.err("Invalid keysym '{s}'", .{token});
@@ -225,7 +225,7 @@ const api = struct {
             if (binding.mod_mask.hasAll(.{mask_value})) {
                 log.err(
                     "Duplicate modifier '{s}' in binding '{s}'\n",
-                    .{ meta.tagName(mask_value), bind_string },
+                    .{ @tagName(mask_value), bind_string },
                 );
                 return 0;
             }
@@ -246,7 +246,7 @@ const api = struct {
             switch (press_type) {
                 .none, .nil => binding.on_press = null,
                 else => {
-                    log.err("'press' must be a function, found {s}", .{meta.tagName(press_type)});
+                    log.err("'press' must be a function, found {s}", .{@tagName(press_type)});
                     return 0;
                 },
             }
@@ -263,7 +263,7 @@ const api = struct {
             switch (release_type) {
                 .none, .nil => binding.on_release = null,
                 else => {
-                    log.err("'release' must be a function, found {s}", .{meta.tagName(release_type)});
+                    log.err("'release' must be a function, found {s}", .{@tagName(release_type)});
                     return 0;
                 },
             }
@@ -280,7 +280,7 @@ const api = struct {
             switch (filter_type) {
                 .none, .nil => binding.filter = null,
                 else => {
-                    log.err("'filter' must be a function, found {s}", .{meta.tagName(filter_type)});
+                    log.err("'filter' must be a function, found {s}", .{@tagName(filter_type)});
                     return 0;
                 },
             }
@@ -299,7 +299,7 @@ const api = struct {
                 switch (motion_type) {
                     .none, .nil => motion = null,
                     else => {
-                        log.err("'motion' must be a function, found {s}", .{meta.tagName(motion_type)});
+                        log.err("'motion' must be a function, found {s}", .{@tagName(motion_type)});
                         return 0;
                     },
                 }
@@ -315,7 +315,7 @@ const api = struct {
                     switch (motion_resolution_type) {
                         .none, .nil => {},
                         else => {
-                            log.err("'motion_resolution' must be a number, found {s}", .{meta.tagName(motion_type)});
+                            log.err("'motion_resolution' must be a number, found {s}", .{@tagName(motion_type)});
                             return 0;
                         },
                     }
@@ -334,7 +334,7 @@ const api = struct {
                 switch (enter_type) {
                     .none, .nil => enter = null,
                     else => {
-                        log.err("'enter' must be a function, found {s}", .{meta.tagName(enter_type)});
+                        log.err("'enter' must be a function, found {s}", .{@tagName(enter_type)});
                         return 0;
                     },
                 }
@@ -352,7 +352,7 @@ const api = struct {
                 switch (exit_type) {
                     .none, .nil => exit = null,
                     else => {
-                        log.err("'exit' must be a function, found {s}", .{meta.tagName(exit_type)});
+                        log.err("'exit' must be a function, found {s}", .{@tagName(exit_type)});
                         return 0;
                     },
                 }
@@ -444,7 +444,7 @@ const api = struct {
                 const err = os.execvpeZ(
                     argv_buf.ptr[0].?,
                     argv_buf.ptr,
-                    @ptrCast([*:null]const ?[*:0]const u8, os.environ.ptr),
+                    @ptrCast(os.environ.ptr),
                 );
 
                 log.err("Error executing command '{s}': {!}", .{ argv[0], err });
@@ -457,7 +457,7 @@ const api = struct {
     }
 
     pub fn cmd(lua: *Lua) i32 {
-        const count = @intCast(usize, lua.getTop());
+        const count: usize = @intCast(lua.getTop());
         if (count == 0) {
             log.err("lucky.{s}() requires at least one argument!", .{@src().fn_name});
             return 0;
@@ -473,7 +473,7 @@ const api = struct {
         };
 
         for (0..count) |i| {
-            args[i] = to(lua, []const u8, @intCast(i32, i + 1));
+            args[i] = to(lua, []const u8, @intCast(i + 1));
         }
 
         execute(arena, args, false);
@@ -600,7 +600,7 @@ const api = struct {
             push(lua, @as([]const u8, ""));
             return 1;
         };
-        const title = std.mem.span(@ptrCast([*:0]const u8, pointer));
+        const title = std.mem.span(@as([*:0]const u8, @ptrCast(pointer)));
 
         push(lua, title);
         return 1;
@@ -627,7 +627,7 @@ const api = struct {
             push(lua, @as([]const u8, ""));
             return 1;
         };
-        const instance = std.mem.span(@ptrCast([*:0]const u8, pointer));
+        const instance = std.mem.span(@as([*:0]const u8, @ptrCast(pointer)));
 
         push(lua, instance);
         return 1;
@@ -654,7 +654,7 @@ const api = struct {
             push(lua, @as([]const u8, ""));
             return 1;
         };
-        var class_pointer = @ptrCast([*:0]const u8, pointer);
+        var class_pointer: [*:0]const u8 = @ptrCast(pointer);
         const class = while (true) : (class_pointer += 1) {
             if (class_pointer[0] == '\x00') {
                 class_pointer += 1;
@@ -804,15 +804,15 @@ fn to(lua: *Lua, comptime T: type, index: i32) T {
     switch (@typeInfo(T)) {
         .Int => {
             const int = lua.toInteger(index) catch 0;
-            return @intCast(T, int);
+            return @intCast(int);
         },
         .Enum => |Enum| {
             const int = lua.toInteger(index) catch 0;
-            return @intToEnum(T, @intCast(Enum.tag_type, int));
+            return @enumFromInt(@as(Enum.tag_type, @intCast(int)));
         },
         .Float => {
             const float = lua.toNumber(index) catch 0.0;
-            return @floatCast(T, float);
+            return @floatCast(float);
         },
         .Bool => {
             const boolean = lua.toBoolean(index);
@@ -852,13 +852,13 @@ fn push(lua: *Lua, value: anytype) void {
     const T = @TypeOf(value);
     switch (@typeInfo(T)) {
         .Fn => lua.pushFunction(wrap(value)),
-        .Int => lua.pushInteger(@intCast(ziglua.Integer, value)),
-        .Enum => lua.pushInteger(@intCast(ziglua.Integer, @enumToInt(value))),
-        .Float => lua.pushNumber(@floatCast(ziglua.Number, value)),
+        .Int => lua.pushInteger(@intCast(value)),
+        .Enum => lua.pushInteger(@intCast(@intFromEnum(value))),
+        .Float => lua.pushNumber(@floatCast(value)),
         .Bool => lua.pushBoolean(value),
         .Pointer => |Pointer| {
             if (Pointer.size == .Slice and Pointer.child == u8) {
-                lua.pushBytes(value);
+                _ = lua.pushBytes(value);
             } else {
                 compileError(
                     "Unsupported push type '{s}' for lua function!",
@@ -954,11 +954,9 @@ fn createTable(lua: *Lua, source: anytype) void {
     const declarations = comptime meta.declarations(source);
     lua.createTable(0, declarations.len);
     inline for (declarations) |decl| {
-        if (decl.is_pub) {
-            const value = @field(source, decl.name);
-            push(lua, value);
-            lua.setField(-2, decl.name ++ "\x00");
-        }
+        const value = @field(source, decl.name);
+        push(lua, value);
+        lua.setField(-2, decl.name ++ "\x00");
     }
 }
 
@@ -978,7 +976,7 @@ fn loadApiAndConfig(lua: *Lua) !void {
     // try lua.loadBuffer(lua_api, "lucky lua source");
     // lua.protectedCall(0, 0, 0) catch unreachable;
 
-    lua.loadFile(config_path) catch |err| {
+    lua.loadFile(config_path, .text) catch |err| {
         log.err("{s}", .{to(lua, []const u8, -1)});
         switch (err) {
             error.File => return error.ConfigFileNotFound,
