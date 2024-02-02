@@ -1,18 +1,19 @@
 .{
     .name = "lucky",
-    .version = "0.1.1",
+    .version = "0.2.0",
     .dependencies = .{
         .accord = .{
-            .url = "https://github.com/BanchouBoo/accord/archive/3f47f90524d828e24f806aca6594c2d65b5b3ea0.tar.gz",
-            .hash = "1220fc976c02a413edd266504641ed2f519d2ab5670aa99af4ae91c5712d2e95ddbd",
+            .url = "https://github.com/BanchouBoo/accord/archive/7674de5709b672f8021adf68ce65a611c56f2402.tar.gz",
+            .hash = "12207ef226016de8027afc5ac0b4bfebeec0f4d0bfd10fd3f17af74b92546930ad9f",
         },
         .xzb = .{
-            .url = "https://github.com/BanchouBoo/xzb/archive/ba1b24f7776d98f360600bb95b5e06b81b7db4e2.tar.gz",
-            .hash = "1220ff9abd67e15550b55a46492f6caf11614a3e372297d58a7b8ab0753d05254209",
+            .url = "https://github.com/BanchouBoo/xzb/archive/e1ce5bad027e0ca70863d4b2a03242e74086d983.tar.gz",
+            .hash = "1220793312d155e18e11bb2d5c7afe623d6afc832397e454b2352bf22bae03bbeec0",
         },
         .ziglua = .{
-            .url = "https://github.com/natecraddock/ziglua/archive/0530a8466e3e6295b9584552302b99aef34d3cde.tar.gz",
-            .hash = "122017d389142c75c975319eaced9c035dd3904f35f835ddf455375526f606b410f4",
-        }
+            .url = "https://github.com/natecraddock/ziglua/archive/a213c57a32552c7d27318f1c4f6c4685bad54d9e.tar.gz",
+            .hash = "1220d1c61a0788d0fc4b88947a67746009cf5b00c59222a495682235bdf415ce9531",
+        },
     },
+    .paths = .{""},
 }

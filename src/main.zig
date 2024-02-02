@@ -235,7 +235,7 @@ const api = struct {
         _ = lua.rawGetIndex(ziglua.registry_index, function_register);
         defer lua.pop(1);
 
-        var press_type = lua.getField(2, "press");
+        const press_type = lua.getField(2, "press");
         if (press_type == .function) {
             binding.on_press = lua.ref(-2) catch {
                 log.err("Error storing press function for binding '{s}'", .{bind_string});
@@ -803,11 +803,11 @@ fn parseButton(
 fn to(lua: *Lua, comptime T: type, index: i32) T {
     switch (@typeInfo(T)) {
         .Int => {
-            const int = lua.toInteger(index) catch 0;
+            const int = lua.toInteger(index);
             return @intCast(int);
         },
         .Enum => |Enum| {
-            const int = lua.toInteger(index) catch 0;
+            const int = lua.toInteger(index);
             return @enumFromInt(@as(Enum.tag_type, @intCast(int)));
         },
         .Float => {
@@ -976,7 +976,7 @@ fn loadApiAndConfig(lua: *Lua) !void {
     // try lua.loadBuffer(lua_api, "lucky lua source");
     // lua.protectedCall(0, 0, 0) catch unreachable;
 
-    lua.loadFile(config_path, .text) catch |err| {
+    lua.loadFile(config_path) catch |err| {
         log.err("{s}", .{to(lua, []const u8, -1)});
         switch (err) {
             error.File => return error.ConfigFileNotFound,
@@ -1044,7 +1044,7 @@ pub fn main() anyerror!u8 {
     button_bindings = std.ArrayList(Binding).init(allocator);
     defer button_bindings.clearAndFree();
 
-    var lua = try Lua.init(allocator);
+    var lua = try Lua.init(&allocator);
     defer lua.deinit();
 
     lua.newTable();
